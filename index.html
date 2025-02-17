@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>inbridge</title>
+    <meta name="description" content="Modern web development team that have a lot of ideas, and not afraid to share them with the world">
+    <meta name="keywords" content="inbridge, inbridge.cc, inpixel, inpixel.cc, web development, web studio, web design, web agency, web development company, web design company, web studio company, web studio agency, web studio studio, web studio studio agency, web studio studio company, web studio studio agency company, web studio studio company agency">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://iconsax.gitlab.io/i/icons.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        display: ['Clash Display', 'sans-serif']
+                    },
+                    animation: {
+                        'gradient': 'gradient 20s cubic-bezier(0.4, 0, 0.2, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'shimmer': 'shimmer 2s infinite',
+                        'subtle-bounce': 'subtle-bounce 3s infinite',
+                    },
+                    keyframes: {
+                        'subtle-bounce': {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-15px)' },
+                        },
+                        gradient: {
+                            '0%, 100%': { 
+                                'background-position': '0% 50%',
+                                'background-size': '200% 200%'
+                            },
+                            '50%': { 
+                                'background-position': '100% 50%',
+                                'background-size': '200% 200%'
+                            }
+                        },
+                        shimmer: {
+                            '0%, 100%': { 'background-position': '-200% 0' },
+                            '50%': { 'background-position': '200% 0' },
+                        }
+                    },
+                    boxShadow: {
+                        'neon-blue': '0 0 30px rgba(59, 130, 246, 0.6), 0 0 50px rgba(59, 130, 246, 0.4)',
+                        'neon-purple': '0 0 30px rgba(168, 85, 247, 0.6), 0 0 50px rgba(168, 85, 247, 0.4)',
+                    }
+                },
+            },
+            plugins: []
+        }
+    </script>
+    <style type="text/tailwind">
+        @layer utilities {
+            .advanced-gradient {
+                background: linear-gradient(
+                    -45deg, 
+                    #ee7752, 
+                    #e73c7e, 
+                    #23a6d5, 
+                    #23d5ab
+                );
+                background-size: 400% 400%;
+                animation: gradient 15s ease infinite;
+            }
+            .particle-bg {
+                background-image: 
+                    radial-gradient(circle at 20% 80%, rgba(59,130,246,0.3) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 20%, rgba(168,85,247,0.3) 0%, transparent 50%);
+            }
+            .noise {
+                background-image: 
+                    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+                opacity: 0.05;
+            }
+            .text-gradient {
+                @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-500 via-violet-500 to-blue-600 animate-gradient;
+            }
+            .text-gradient-pink {
+                @apply bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-pink-600 animate-gradient;
+            }
+            .nav-link {
+                @apply relative text-gray-300 hover:text-white transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-0.5 after:w-0 after:bg-blue-500 after:transition-all after:duration-300 hover:after:w-full;
+            }
+            .glass-card {
+                @apply backdrop-blur-xl bg-white/5 border border-white/10 hover:border-white/20 transition-all duration-300;
+            }
+            .project-card {
+                @apply relative overflow-hidden rounded-2xl bg-neutral-900 transition-all duration-500 hover:scale-[1.02] active:scale-[0.98] hover:shadow-2xl hover:shadow-blue-500/20;
+            }
+            .text-ultra-gradient {
+                @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 animate-gradient bg-size-200;
+            }
+            .glass-morphic {
+                @apply backdrop-blur-2xl bg-white/10 border border-white/20 shadow-2xl rounded-3xl;
+            }
+        }
+    </style>
+</head>
+<body class="bg-neutral-950 text-white font-sans relative overflow-x-hidden">
+    
+    <div class="fixed inset-0 advanced-gradient opacity-60 animate-gradient z-0"></div>
+    
+    
+    <div class="fixed inset-0 noise pointer-events-none"></div>
+
+    
+    <div class="particle-bg fixed inset-0 opacity-30"></div>
+
+    
+    <header class="fixed top-0 left-0 right-0 z-50" data-header>
+        <nav class="relative w-full mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <img src="/logo.svg" alt="InBridge Logo" class="w-28 pt-1 text-white">
+            </div>
+            
+            
+            <div class="md:hidden flex items-center">
+                <button id="mobile-menu-toggle" class="text-white focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+
+            
+            <div class="hidden md:flex items-center gap-4">
+                <a href="#projects" class="text-gray-300 hover:text-white transition-colors duration-300 px-3 py-1 rounded-xl text-sm relative 
+                    before:absolute before:inset-0 before:bg-white/5 before:opacity-0 hover:before:opacity-100 before:-z-10 before:rounded-xl 
+                    hover:scale-105 active:scale-95 transition-transform">Projects</a>
+                <a href="#about" class="text-gray-300 hover:text-white transition-colors duration-300 px-3 py-1 rounded-xl text-sm relative
+                    before:absolute before:inset-0 before:bg-white/5 before:opacity-0 hover:before:opacity-100 before:-z-10 before:rounded-xl 
+                    hover:scale-105 active:scale-95 transition-transform">About</a>
+               <a href="https://github.com/inbridgecc" target="_blank" class="flex items-center justify-center rounded-full hover:bg-white/10 w-8 h-8 transition-all 
+                    hover:scale-110 active:scale-95">
+                    <svg class="w-4 h-4 text-gray-300 hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                    </svg>
+                </a>
+            </div>
+        </nav>
+
+        
+        <div id="mobile-menu" class="fixed top-0 left-0 w-full h-screen bg-black/95 z-50 hidden">
+            <div class="flex flex-col items-center justify-center h-full space-y-6">
+                <a href="#projects" class="text-2xl text-gray-300 hover:text-white">Projects</a>
+                <a href="#about" class="text-2xl text-gray-300 hover:text-white">About</a>
+                <a href="#contact" class="text-2xl text-gray-300 hover:text-white">Contact</a>
+                <a href="https://github.com/inbridgecc" target="_blank" class="text-2xl text-gray-300 hover:text-white flex items-center gap-2">
+                    GitHub
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                    </svg>
+                </a>
+            </div>
+            <button id="mobile-menu-close" class="absolute top-6 right-6 text-white">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    
+    <section class="relative min-h-screen flex items-center pt-12 md:pt-24 overflow-hidden 
+        after:content-[''] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-14 
+        after:bg-gradient-to-b after:from-transparent after:via-neutral-950/30 after:to-neutral-950 after:z-10">
+        <div class="absolute inset-0 bg-gradient-to-br from-black/80 via-neutral-900/80 to-black/80 
+            will-change-transform transition-transform duration-500 ease-out" 
+            data-parallax-bg></div>
+        
+        <div class="relative max-w-7xl mx-auto px-6 py-6 md:py-20 z-10 
+            grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
+            <div class="space-y-4 lg:space-y-8 text-center md:text-left transform transition-all duration-700 ease-out order-1 md:order-1" data-hero-text>
+                
+                <div class="flex justify-center md:justify-start">
+                    <a href="#projects" class="bg-white/10 hover:border-white/30 hover:scale-[1.01] transition-all duration-300 backdrop-blur-md border border-white/20 rounded-full px-2 py-1 md:px-4 md:py-2">
+                        <span class="text-[10px] lg:text-sm flex flex-row items-center gap-2 text-gray-300">
+                            <i class="iconsax text-white text-xs md:text-sm" icon-name="flash-1"></i>
+                            <span><b>inPixel</b> is moving into active development phase!</span>
+                           <i class="iconsax text-white text-xs md:text-sm" icon-name="arrow-right"></i>
+                        </span>
+                    </a>
+                </div>
+                
+                <h1 class="text-4xl md:text-6xl lg:text-8xl font-black leading-tight">
+                    <span class="block text-white relative">
+                        <span class="line-through-rainbow">borders</span> of
+                    </span>
+                    <span class="block imagination-text">
+                        imagination
+                    </span>
+                </h1>
+
+                <p class="text-sm md:text-xl text-gray-400 max-w-2xl mx-auto md:mx-0 !mb-12 lg:!mb-0">
+                    We have a lot of ideas, and we're not afraid to share them with the world, because they're just too good to keep to ourselves (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
+                </p>
+
+                <div class="flex flex-row space-x-4 items-center md:space-y-0 md:space-x-6 justify-center md:justify-start">
+                    <a href="#projects" class="group relative inline-flex items-center gap-3 
+                        backdrop-blur-xl bg-white/10 border border-white/20 
+                        text-white px-2 py-1 md:px-8 md:py-4 rounded-xl 
+                        transition-all duration-300 
+                        hover:bg-white/20 hover:border-white/30 
+                        hover:scale-105 
+                        shadow-xl hover:shadow-2xl 
+                        active:scale-95 text-center">
+                        <span class="relative z-10 text-xs md:text-sm">Explore Projects</span>
+                        <i class="iconsax text-white text-xs md:text-sm" icon-name="arrow-right"></i>
+                    </a>
+                    <a href="https://github.com/inbridgecc" target="_blank" class="group inline-flex items-center gap-3 
+                        text-gray-300 hover:text-white px-2 py-1 md:px-8 md:py-4 
+                        transition-all duration-300 hover:scale-105 text-center">
+                        <span class="text-xs md:text-sm">Join us on GitHub</span>
+                        <i class="iconsax text-white text-xs md:text-sm" icon-name="arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="relative order-2 md:order-2" data-hero-image>
+                <div class="absolute inset-0 opacity-30 blur-3xl bg-gradient-to-br from-blue-500/50 via-purple-600/50 to-pink-500/50 animate-pulse rounded-full"></div>
+                
+                <div class="relative z-10 grid grid-cols-1 gap-1 lg:ml-12 lg:rotate-2">
+                    <div class="glass-morphic p-3 flex items-center space-x-6 transform transition-all duration-300 hover:scale-[1.02] group">
+                        <div class="w-14 min-w-14 h-14 md:w-20 md:h-20 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full flex items-center justify-center">
+                            <i class="iconsax text-white text-3xl" icon-name="bulb-charge"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-sm md:text-lg font-bold text-white mb-2">Unlimited ideas</h3>
+                            <p class="text-xs md:text-sm text-gray-300 max-w-[300px]">
+                                Our brain is like a factory. It's always working, and it's always making some crazy thoughts.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="glass-morphic p-3 flex items-center space-x-6 transform transition-all duration-300 hover:scale-[1.02]">
+                        <div class="w-14 min-w-14 h-14 md:w-20 md:h-20 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full flex items-center justify-center">
+                            <i class="iconsax text-white text-3xl" icon-name="flash-speed"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-sm md:text-lg font-bold text-white mb-2">
+                                Quality over quantity
+                            </h3>
+                            <p class="text-xs md:text-sm text-gray-300 max-w-[300px]">
+                                Except for the quantity of our ideas, of course (because we have a lot of them)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="glass-morphic p-3 flex items-center space-x-6 transform transition-all duration-300 hover:scale-[1.02]">
+                        <div class="w-14 min-w-14 h-14 md:w-20 md:h-20 bg-gradient-to-br from-pink-500/20 to-blue-500/20 rounded-full flex items-center justify-center">
+                            <i class="iconsax text-white text-3xl" icon-name="shield-tick"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-sm md:text-lg font-bold text-white mb-2">
+                                High standards
+                            </h3>
+                            <p class="text-xs md:text-sm text-gray-300 max-w-[300px]">
+                               We make high-standard products, because we can. Why not?
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <section id="projects" class="relative py-16 md:py-32 !bg-neutral-950 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
+            <div class="flex flex-col items-center text-center mb-8 md:mb-16">
+                <h2 class="text-3xl md:text-5xl font-bold mb-3 text-ultra-gradient">
+                    Our masterpieces
+                </h2>
+                <p class="text-base md:text-lg text-gray-400 max-w-2xl font-light">
+                    something what we put effort, power and time into
+                </p>
+            </div>
+            
+            
+            <div class="project-filters overflow-x-auto md:justify-center flex mb-8 md:mb-16">
+                <div class="inline-flex space-x-2 md:space-x-0 md:bg-white/5 md:backdrop-blur-xl md:border md:border-white/10 md:rounded-full md:p-1 md:shadow-xl">
+                    <button data-filter="all" class="project-filter-btn active px-6 py-2 rounded-full 
+                        text-sm font-medium transition-all duration-300
+                        text-gray-400 hover:text-white 
+                        hover:bg-white/10">
+                        All Projects
+                    </button>
+                    <button data-filter="websites" class="project-filter-btn px-6 py-2 rounded-full
+                        text-sm font-medium transition-all duration-300
+                        text-gray-400 hover:text-white 
+                        hover:bg-white/10">
+                        Websites
+                    </button>
+                    <button data-filter="software" class="project-filter-btn px-6 py-2 rounded-full 
+                        text-sm font-medium transition-all duration-300
+                        text-gray-400 hover:text-white 
+                        hover:bg-white/10">
+                        Software
+                    </button>
+                    <button data-filter="bots" class="project-filter-btn px-6 py-2 rounded-full 
+                        text-sm font-medium transition-all duration-300
+                        text-gray-400 hover:text-white 
+                        hover:bg-white/10">
+                        Bots
+                    </button>
+                    <button data-filter="games" class="project-filter-btn px-6 py-2 rounded-full 
+                        text-sm font-medium transition-all duration-300
+                        text-gray-400 hover:text-white 
+                        hover:bg-white/10">
+                        Games
+                    </button>
+                </div>
+            </div>
+
+            
+            <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
+                <a target="_blank" href="https://inpixel.cc" data-category="software" class="project-card group relative rounded-2xl overflow-hidden transition-all duration-300 
+                    backdrop-blur-xl bg-white/5 border border-white/10 hover:border-white/20 
+                    shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98]">
+                    <div class="aspect-video overflow-hidden relative">
+                        <div class="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 opacity-50"></div>
+                        <img src="/placeholder.svg" alt="Project 1" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity">
+                    </div>
+                    <div class="p-6 relative z-10">
+                        <h3 class="text-xl font-semibold mb-2 text-white">inPixel</h3>
+                        <p class="text-gray-400 mb-4">Image editing software built on top of Electron and shadcn-vue</p>
+                        <div class="flex gap-2 flex-wrap">
+                            <span class="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-sm text-gray-300 
+                                transition-all hover:bg-white/20">Software</span>
+                            <span class="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-sm rainbow-text 
+                                transition-all hover:bg-white/20">Open-Source</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a target="_blank" href="https://t.me/tayleraibot" data-category="bots" class="project-card group relative rounded-2xl overflow-hidden transition-all duration-300 
+                    backdrop-blur-xl bg-white/5 border border-white/10 hover:border-white/20 
+                    shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98]">
+                    <div class="aspect-video overflow-hidden relative">
+                        <div class="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 opacity-50"></div>
+                        <img src="/placeholder.svg" alt="Project 1" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity">
+                    </div>
+                    <div class="p-6 relative z-10">
+                        <h3 class="text-xl font-semibold mb-2 text-white">Tayler</h3>
+                        <p class="text-gray-400 mb-4">Telegram AI assistant built on top of GPTs and Node.js</p>
+                        <div class="flex gap-2 flex-wrap">
+                            <span class="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-sm text-gray-300 
+                                transition-all hover:bg-white/20">Bot</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    
+    <section id="about" class="relative py-20 md:py-32 !bg-neutral-950 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
+            <div class="flex flex-col items-center text-center mb-12 md:mb-20">
+                <h2 class="text-4xl md:text-6xl font-extrabold mb-4 text-ultra-gradient">
+                    Who we are?
+                </h2>
+                <p class="text-gray-400 text-lg max-w-2xl">
+                    Just a bunch of creative minds who love to build cool stuff
+                </p>
+            </div>
+
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                
+                <div class="glass-morphic p-6 group hover:bg-white/[0.15] transition-all duration-500 cursor-pointer">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <i class="iconsax text-2xl text-blue-400" icon-name="emoji-happy"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white">Fun Facts</h3>
+                    </div>
+                    <div class="space-y-3">
+                        <p class="text-gray-400 text-sm flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                            We code while listening to house music 🎵
+                        </p>
+                        <p class="text-gray-400 text-sm flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+                            We love to code in the night 🌙
+                        </p>
+                        <p class="text-gray-400 text-sm flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-pink-500"></span>
+                            We debug with rubber ducks lol 🦆
+                        </p>
+                    </div>
+                </div>
+
+                
+                <div class="glass-morphic p-6 group hover:bg-white/[0.15] transition-all duration-500 cursor-pointer">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500/20 to-blue-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <i class="iconsax text-2xl text-pink-400" icon-name="code-1"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white">We think in</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 text-sm bg-white/10 rounded-full text-gray-300">TypeScript</span>
+                        <span class="px-3 py-1 text-sm bg-white/10 rounded-full text-gray-300">Vue</span>
+                        <span class="px-3 py-1 text-sm bg-white/10 rounded-full text-gray-300">Electron</span>
+                        <span class="px-3 py-1 text-sm bg-white/10 rounded-full text-gray-300">Vite</span>
+                        <span class="px-3 py-1 text-sm bg-white/10 rounded-full text-gray-300">Tailwind</span>
+                        <span class="px-3 py-1 text-sm bg-white/10 rounded-full text-gray-300">Three.js</span>
+                        <span class="px-3 py-1 text-sm bg-white/10 rounded-full text-gray-300">WebGL</span>
+                        <span class="px-3 py-1 text-sm bg-white/10 rounded-full text-gray-300">MongoDB</span>
+                        <span class="px-3 py-1 text-sm bg-white/10 rounded-full text-gray-300">PostgreSQL</span>
+                        <span class="px-3 py-1 text-sm bg-white/10 rounded-full text-gray-300">Node.js</span>
+                    </div>
+                </div>
+
+                
+                <div class="glass-morphic p-6 group hover:bg-white/[0.15] transition-all duration-500 cursor-pointer md:col-span-2 lg:col-span-1">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500/20 to-blue-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <i class="iconsax text-2xl text-green-400" icon-name="activity-chart-favorite"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white">Office stats</h3>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-white mb-1 group-hover:text-blue-400 transition-colors">∞</div>
+                            <div class="text-sm text-gray-400">ideas in our heads</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-white mb-1 group-hover:text-purple-400 transition-colors">42</div>
+                            <div class="text-sm text-gray-400">cups of coffee/day</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <footer class="bg-neutral-950 py-6">
+        <div class="mx-auto px-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4 pt-1">
+                    <img src="/logo.svg" alt="InBridge Logo" class="w-28 text-white">
+                </div>
+                <div class="flex items-center gap-4">
+                    <span class="text-gray-400 text-xs">our website is also made by us <span class="text-[10px]">(＾▽＾)</span></span>
+                </div>
+                <div class="hidden md:flex items-center gap-4">
+                    <a href="mailto:cat@inbridge.cc" class="text-gray-300 hover:text-white transition-colors 
+                        px-3 py-1 rounded-xl text-sm relative 
+                        before:absolute before:inset-0 before:bg-white/5 before:opacity-0 hover:before:opacity-100 before:-z-10 before:rounded-xl 
+                        hover:scale-105 active:scale-95 transition-transform">
+                        cat@inbridge.cc
+                    </a>
+                    <a href="https://github.com/inbridgecc" target="_blank" class="flex items-center justify-center rounded-full hover:bg-white/10 w-8 h-8 transition-all 
+                        hover:scale-110 active:scale-95 z-10">
+                        <svg class="w-4 h-4 text-gray-300 hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <style>
+        @keyframes slide-up {
+            0% { 
+                transform: translateY(100%) scale(0.9); 
+                opacity: 0; 
+            }
+            100% { 
+                transform: translateY(0) scale(1); 
+                opacity: 1; 
+            }
+        }
+        @keyframes fade-in {
+            0% { 
+                opacity: 0; 
+                transform: translateY(30px) scale(0.95); 
+            }
+            100% { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
+        }
+        @keyframes custom-pulse {
+            0%, 100% { 
+                opacity: 0.3; 
+                transform: scale(0.9);
+            }
+            50% { 
+                opacity: 0.7; 
+                transform: scale(1.1);
+            }
+        }
+
+        .animate-pulse {
+            animation: custom-pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
+
+    <script>
+        function initStarField() {
+            const heroSection = document.querySelector('section');
+            const width = heroSection.clientWidth;
+            const height = heroSection.clientHeight;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ 
+                alpha: true, 
+                antialias: true 
+            });
+            
+            renderer.setSize(width, height);
+            renderer.setClearColor(0x000000, 0);
+            heroSection.appendChild(renderer.domElement);
+
+            camera.position.x = 10;
+            camera.position.y = 6;
+            camera.position.z = 3;
+
+            const sphereShader = {
+                vertexShader: `
+                    varying vec2 vUv;
+                    varying vec3 vNormal;
+                    uniform float uTime;
+
+                    void main() {
+                        vUv = uv;
+                        vNormal = normal;
+                        
+                        vec3 pos = position;
+                        pos += normal * sin(position.y * 10.0 + uTime) * 0.1;
+                        
+                        gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+                    }
+                `,
+                fragmentShader: `
+                    varying vec2 vUv;
+                    varying vec3 vNormal;
+                    uniform float uTime;
+
+                    void main() {
+                        vec3 color1 = vec3(0.36, 0.51, 0.96);  
+                        vec3 color2 = vec3(0.66, 0.33, 0.97);  
+                        
+                        float pattern = sin(vUv.y * 20.0 + uTime) * 0.5 + 0.5;
+                        vec3 color = mix(color1, color2, pattern);
+                        
+                        float fresnel = pow(1.0 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 3.0);
+                        color += fresnel * 0.08;
+                        
+                        gl_FragColor = vec4(color, 1.0);
+                    }
+                `
+            };
+
+            const sphereMaterial = new THREE.ShaderMaterial({
+                vertexShader: sphereShader.vertexShader,
+                fragmentShader: sphereShader.fragmentShader,
+                uniforms: {
+                    uTime: { value: 0 }
+                }
+            });
+
+            const sphereGeometry = new THREE.IcosahedronGeometry(1.2, 32);
+            const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+            sphere.position.set(-2.3, 0, -2);
+            sphere.scale.set(1.5, 1.5, 1.5);
+            scene.add(sphere);
+
+            
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 1000;
+            const posArray = new Float32Array(particlesCount * 3);
+
+            for(let i = 0; i < particlesCount * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 15;
+            }
+
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.03,
+                color: 0xffffff,
+                transparent: true,
+                opacity: 0.5,
+                blending: THREE.AdditiveBlending
+            });
+
+            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particlesMesh);
+
+            let mouseX = 0, mouseY = 0;
+            document.addEventListener('mousemove', (event) => {
+                mouseX = (event.clientX / width - 0.5) * 3;
+                mouseY = -(event.clientY / height - 0.5) * 3;
+            });
+
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                const time = performance.now() * 0.001;
+                
+                sphereMaterial.uniforms.uTime.value = time;
+                
+                sphere.rotation.x = time * 0.3;
+                sphere.rotation.y = time * 0.5;
+
+                particlesMesh.rotation.x += 0.0003;
+                particlesMesh.rotation.y += 0.0003;
+
+                camera.position.x += (mouseX * 0.1 - camera.position.x) * 0.05;
+                camera.position.y += (mouseY * 0.1 - camera.position.y) * 0.05;
+
+                const scrollY = window.scrollY;
+                particlesMesh.position.z = scrollY * 0.001;
+                sphere.position.z = -2 + scrollY * 0.0005;
+
+                renderer.render(scene, camera);
+            }
+
+            animate();
+
+            window.addEventListener('resize', () => {
+                const newWidth = heroSection.clientWidth;
+                const newHeight = heroSection.clientHeight;
+                
+                camera.aspect = newWidth / newHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(newWidth, newHeight);
+            });
+        }
+
+        window.addEventListener('load', initStarField);
+    </script>
+
+    <style>
+        section canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+    </style>
+
+    <style>
+        .line-through-rainbow {
+            position: relative;
+            display: inline-block;
+        }
+        .line-through-rainbow::after {
+            content: '';
+            position: absolute;
+            left: -2%;
+            right: -2%;
+            bottom: 50%;
+            height: 10px;
+            background: linear-gradient(
+                to right, 
+                #3b82f6,
+                #8b5cf6,
+                #ec4899,
+                #22d3ee,
+                #10b981
+            );
+            background-size: 200% 200%;
+            animation: rainbow-line 12s ease-in-out infinite;
+            transform: translateY(50%) rotate(-2deg);
+            border-radius: 10px;
+            opacity: 0.9;
+            filter: blur(0.5px);
+            box-shadow: 
+                0 0 5px rgba(59, 130, 246, 0.5),
+                0 0 10px rgba(139, 92, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .line-through-rainbow:hover::after {
+            opacity: 1;
+            transform: translateY(50%) rotate(-1deg) scale(1.02);
+            filter: blur(0px);
+        }
+
+        @keyframes rainbow-line {
+            0% {
+                background-position: 0% 50%;
+                transform: translateY(50%) rotate(-2deg);
+            }
+            50% {
+                background-position: 100% 50%;
+                transform: translateY(50%) rotate(-1deg);
+            }
+            100% {
+                background-position: 0% 50%;
+                transform: translateY(50%) rotate(-2deg);
+            }
+        }
+
+        img[src="/logo.svg"] {
+            filter: invert(1);
+        }
+    </style>
+
+    <script>
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const heroSection = document.querySelector('section');
+            const parallaxBg = heroSection.querySelector('[data-parallax-bg]');
+            const heroText = heroSection.querySelector('[data-hero-text]');
+            const heroImage = heroSection.querySelector('[data-hero-image]');
+
+            
+            window.addEventListener('mousemove', (e) => {
+                const x = (e.clientX - window.innerWidth / 2) / 50;
+                const y = (e.clientY - window.innerHeight / 2) / 50;
+                
+                parallaxBg.style.transform = `translate(${-x}px, ${-y}px) scale(1.05)`;
+            });
+
+            
+            window.addEventListener('scroll', () => {
+                const scrollY = window.scrollY;
+                const opacity = Math.max(0, 1 - scrollY / (window.innerHeight / 2));
+                
+                heroText.style.transform = `translateY(${scrollY * 0.5}px)`;
+                heroText.style.opacity = opacity;
+                
+                heroImage.style.transform = `translateY(${scrollY * 0.7}px) rotate(${scrollY * 0.05}deg)`;
+                heroImage.style.opacity = opacity;
+            });
+
+            
+            heroSection.addEventListener('mouseenter', () => {
+                heroText.classList.add('hover:scale-[1.01]');
+                heroImage.classList.add('hover:scale-[1.02]');
+            });
+
+            heroSection.addEventListener('mouseleave', () => {
+                heroText.classList.remove('hover:scale-[1.01]');
+                heroImage.classList.remove('hover:scale-[1.02]');
+            });
+        });
+    </script>
+
+    <style>
+        [data-hero-text], [data-hero-image] {
+            transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+            will-change: transform, opacity;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const header = document.querySelector('[data-header]');
+            let lastScrollTop = 0;
+
+            window.addEventListener('scroll', () => {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                
+                if (scrollTop > 0) {
+                    requestAnimationFrame(() => {
+                        header.classList.add('bg-black/20', 'backdrop-blur-xl', 'border-b', 'border-white/10');
+                    });
+                } else {
+                    requestAnimationFrame(() => {
+                        header.classList.remove('bg-black/20', 'backdrop-blur-xl', 'border-b', 'border-white/10');
+                    });
+                }
+
+                lastScrollTop = scrollTop;
+            });
+        });
+    </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const filterButtons = document.querySelectorAll('.project-filter-btn');
+        const projectCards = document.querySelectorAll('.project-card');
+
+        
+        function applyFilter(filter) {
+            filterButtons.forEach(btn => {
+                btn.classList.remove('active', 'bg-white/20', 'text-white');
+                btn.classList.add('text-gray-400');
+            });
+
+            const activeButton = document.querySelector(`[data-filter="${filter}"]`);
+            activeButton.classList.add('active', 'bg-white/20', 'text-white');
+            activeButton.classList.remove('text-gray-400');
+
+            projectCards.forEach(card => {
+                const categories = card.getAttribute('data-category').split(' ');
+                
+                if (filter === 'all' || categories.includes(filter)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const filter = button.getAttribute('data-filter');
+                applyFilter(filter);
+            });
+        });
+
+        
+        applyFilter('all');
+    });
+    </script>
+
+    <style>
+    @keyframes fade-in {
+        from { 
+            opacity: 0; 
+            transform: translateY(20px); 
+        }
+        to { 
+            opacity: 1; 
+            transform: translateY(0); 
+        }
+    }
+
+    .animate-fade-in {
+        animation: fade-in 0.5s ease-out;
+    }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            gsap.registerPlugin(ScrollTrigger);
+
+            
+            const sections = document.querySelectorAll('section');
+
+            sections.forEach((section, index) => {
+                gsap.fromTo(section, 
+                    {
+                        opacity: 0,
+                        y: 100,
+                        scale: 0.9
+                    }, 
+                    {
+                        opacity: 1,
+                        y: 0,
+                        scale: 1,
+                        duration: 1,
+                        ease: 'power2.out',
+                        scrollTrigger: {
+                            trigger: section,
+                            start: 'top 80%',
+                            toggleActions: 'play none none reverse'
+                        }
+                    }
+                );
+
+                
+                gsap.fromTo(section, 
+                    {
+                        backgroundColor: 'rgba(0,0,0,0)'
+                    },
+                    {
+                        backgroundColor: 'rgba(0,0,0,0.1)',
+                        duration: 1,
+                        scrollTrigger: {
+                            trigger: section,
+                            start: 'top 60%',
+                            end: 'bottom 40%',
+                            toggleActions: 'play reverse play reverse'
+                        }
+                    }
+                );
+            });
+
+            
+            sections.forEach((section) => {
+                const elements = section.querySelectorAll(
+                    'h2, h3, p, .project-card, .glass-morphic, .project-filters'
+                );
+
+                gsap.fromTo(elements, 
+                    {
+                        opacity: 0,
+                        y: 50,
+                        scale: 0.95
+                    },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        scale: 1,
+                        duration: 0.8,
+                        stagger: 0.2,
+                        ease: 'power2.out',
+                        scrollTrigger: {
+                            trigger: section,
+                            start: 'top 70%',
+                            toggleActions: 'play none none reverse'
+                        }
+                    }
+                );
+            });
+        });
+    </script>
+
+    <style>
+        section {
+            transition: 
+                background-color 0.5s ease, 
+                opacity 0.5s ease, 
+                transform 0.5s ease;
+            will-change: background-color, opacity, transform;
+        }
+    </style>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const mobileMenuClose = document.getElementById('mobile-menu-close');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuToggle.addEventListener('click', () => {
+            mobileMenu.classList.remove('hidden');
+            mobileMenu.classList.add('block');
+        });
+
+        mobileMenuClose.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+            mobileMenu.classList.remove('block');
+        });
+
+        
+        const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                mobileMenu.classList.remove('block');
+            });
+        });
+    });
+    </script>
+
+    <style>
+        .imagination-text {
+            background: linear-gradient(
+                to right,
+                #3b82f6,  /* blue-500 */
+                #8b5cf6,  /* violet-500 */
+                #ec4899,  /* pink-500 */
+                #22d3ee,  /* cyan-400 */
+                #10b981,  /* emerald-500 */
+                #3b82f6 
+            );
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            background-size: 200% auto;
+            animation: shine 8s linear infinite;
+            text-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
+            position: relative;
+            display: inline-block;
+            line-height: 1.1;
+            padding-bottom: 0.1em;
+        }
+
+        .imagination-text::after {
+            content: 'imagination';
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: inherit;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            filter: blur(20px);
+            opacity: 0.5;
+            z-index: -1;
+            line-height: inherit;
+            padding-bottom: inherit;
+        }
+
+        @keyframes shine {
+            0% {
+                background-position: 0% center;
+            }
+            100% {
+                background-position: -200% center;
+            }
+        }
+    </style>
+
+    <style>
+        .rainbow-text {
+            background: linear-gradient(
+                to right,
+                #ff6b6b,
+                #ffd93d,
+                #6bff84,
+                #4ecdc4,
+                #a06bff
+            );
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: rainbow-move 8s linear infinite;
+            background-size: 200% auto;
+        }
+
+        @keyframes rainbow-move {
+            0% {
+                background-position: 0% center;
+            }
+            100% {
+                background-position: 200% center;
+            }
+        }
+    </style>
+</body>
+</html>
